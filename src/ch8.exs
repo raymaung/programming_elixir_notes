@@ -70,7 +70,7 @@ put_in report.owner.company, "PragProg"
 nested = %{
   buttercup: %{
     actor: %{
-      first: "Robin"
+      first: "Robin",
       last: "Wright"
     },
     role: "princess"
