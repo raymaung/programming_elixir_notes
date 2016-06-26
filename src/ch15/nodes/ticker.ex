@@ -24,7 +24,7 @@ defmodule Ticker do
     # :generator  the name of action
     # [ [] ]      pass in an empty array pass parameter to :generator
     #
-    pid = spawn(__MODULE__, :generator, [[]])
+    pid = spawn(__MODULE__, :generator, [[], 0])
 
     #
     # register the PID of the server under the name :ticker
@@ -47,24 +47,24 @@ defmodule Ticker do
   #
   # the spawned process:
   #
-  def generator(clients) do
+  def generator(clients, count) do
     receive do
       #
       # take a client PID and add to the list of clients
       #
       {:register, pid} ->
         IO.puts "registering #{inspect pid}"
-        generator([pid | clients])
+        generator([pid | clients], count)
     after
       #
       # it may time out then send :tick message to all clients
       #
       @interval ->
-        IO.puts "tick"
+        IO.puts "tick - #{count}"
         Enum.each clients, fn client ->
-          send client, {:tick}
+          send client, {:tick, count}
         end
-        generator(clients)
+        generator(clients, count + 1)
     end
   end
 end
@@ -81,8 +81,8 @@ defmodule Client do
 
   def receiver do
     receive do
-      {:tick} ->
-        IO.puts "tock in client"
+      {:tick, count} ->
+        IO.puts "tock in client - #{count}"
         receiver
     end
   end
