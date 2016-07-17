@@ -1,3 +1,14 @@
+#
+# To run in IEX
+#
+# iex -S mix
+# {:ok, pid} = GenServer.start_link Sequence.Server, 100
+# GenServer.call pid, :next_number
+# GenServer.cast pid, {:increment_number, 10}
+#
+# To reload,
+# r Sequence.Server
+#
 defmodule Sequence.Server do
   use GenServer
 
@@ -7,5 +18,9 @@ defmodule Sequence.Server do
 
   def handle_call({:set_number, new_number}, _from, _current_number) do
     { :reply, new_number, new_number}
+  end
+
+  def handle_cast({:increment_number, delta}, current_number) do
+    { :noreply, current_number + delta}
   end
 end
