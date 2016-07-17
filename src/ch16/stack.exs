@@ -8,6 +8,20 @@
 defmodule Stack do
   use GenServer
 
+  def start_link do
+    GenServer.start_link __MODULE__, [], name: __MODULE__
+  end
+
+  def pop do
+    GenServer.call __MODULE__, :pop
+  end
+
+  def push(value) do
+    GenServer.cast __MODULE__, {:push, value}
+  end
+
+  #######
+  # GenServer implementation
   def handle_call(:pop, _from, []) do
     { :reply, nil, []}
   end
