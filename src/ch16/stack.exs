@@ -16,6 +16,10 @@ defmodule Stack do
     GenServer.call __MODULE__, :pop
   end
 
+  def push(10) do
+    System.halt(10)
+  end
+
   def push(value) do
     GenServer.cast __MODULE__, {:push, value}
   end
@@ -32,5 +36,10 @@ defmodule Stack do
 
   def handle_cast({:push, value}, current_stack) do
     {:noreply, [ value | current_stack ]}
+  end
+
+  def terminate(reason, state) do
+    IO.puts reason
+    IO.puts state
   end
 end
